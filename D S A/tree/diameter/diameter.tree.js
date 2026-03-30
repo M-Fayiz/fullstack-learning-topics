@@ -59,10 +59,11 @@ function diameterOfTree(node){
         if(!node) return 0
 
         let left = dfs(node.left)
-        console.log(`left (${node.val}()`,left)
+       
         let right = dfs(node.right)
-        console.log(`right (${node.val})`,right)
+       
         diameter = Math.max(diameter,left+right)
+        
         return Math.max(left+1,right+1)
     }
    console.log( dfs(node))

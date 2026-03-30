@@ -17,7 +17,7 @@ class Graph{
         }
 
         this.list.get(v1).add(v2)
-        this.list.get(v2).add(v1)
+        // this.list.get(v2).add(v1)
     }
     removeEdges(v1,v2){
         if(!this.list.get(v1)) return 
@@ -93,16 +93,56 @@ class Graph{
         }
         return res.join(' -> ')
     }
+    shortest(from , target){
+        let queue=[[from]]
+        let visit = new Set()
+
+        while(queue.length){
+            let path = queue.shift()
+            let current = path[path.length-1]
+
+            if(current===target) return path.join(' > ')
+
+            if(!visit.has(current)){
+                visit.add(current)
+            }
+
+            for(let next of this.list.get(current)){
+                let newPath = [...path,next]
+                queue.push(newPath)
+            }
+        }
+        return false
+    }
+    recursiveDFS(from){
+        let res =[]
+        let visit = new Set()
+        visit.add(from)
+        const  dfs=(node)=>{
+           visit.add(node)
+           
+            res.push(node)
+
+            for(let next of this.list.get(node)){
+                if(!visit.has(next)){
+                    
+                    dfs(next)
+                }
+            }
+        }
+        dfs(from)
+        return res.join(' -> ')
+    }
 }
 
 const graph = new Graph()
 
 graph.addEdges("A","D")
-graph.addEdges("C","B")
-graph.addEdges("B","D")
+graph.addEdges("B","C")
+graph.addEdges("D","B")
 graph.addEdges("F","A")
-graph.addEdges("M","A")
-graph.addEdges("F","C")
+graph.addEdges("A","M")
+graph.addEdges("C","F")
 graph.addEdges("D","H")
 graph.addEdges("M","H")
 // graph.removeEdges("A","D")
@@ -113,5 +153,7 @@ console.log('isCycle :',graph.isCycle())
 console.log(graph.list)
 console.log('----------------------------------')
 console.log('BFS :',graph.BFS("A"))
+console.log('DFS       :',graph.DFS("A"))
+console.log('recursion :',graph.recursiveDFS("A"))
 console.log('----------------------------------')
-console.log('BFS :',graph.DFS("A"))
+console.log('shorted path :',graph.shortest("A","M") )
